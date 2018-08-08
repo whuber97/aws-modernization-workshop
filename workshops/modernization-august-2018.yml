@@ -11,3 +11,4 @@ vars:
 modules:
   activate:
   - "modules_getting-started_readme"
+  - "modules_container-orchestration_readme"
