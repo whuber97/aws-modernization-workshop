@@ -1,3 +1,5 @@
 modules:
   modules_getting-started_readme:
     name: Getting Started
+  modules_container-orchestration_readme:
+    name: Container Orchestration
