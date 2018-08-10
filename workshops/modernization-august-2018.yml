@@ -13,3 +13,4 @@ modules:
   - "modules_getting-started_readme"
   - "modules_containerize-application_readme"
   - "modules_container-orchestration_readme"
+  - "modules_artifactory_readme"
