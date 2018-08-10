@@ -1,0 +1,6 @@
+= Containerize Application
+
+This is where we will walk the user through how they can containerize the Pet Store.
+The instructions will be the same as:
+// TODO: REMOVE THE BELOW HYPERLINK
+https://workshop.lab.cloudsamurai.io/index.html#/workshop/container_migration/module/containerize-application
