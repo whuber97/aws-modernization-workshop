@@ -5,3 +5,5 @@ modules:
     name: Containerize Application
   modules_container-orchestration_readme:
     name: Container Orchestration
+  modules_artifactory_readme:
+    name: Artifactory    
