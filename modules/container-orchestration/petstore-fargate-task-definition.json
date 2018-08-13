@@ -75,7 +75,7 @@
       }
     }
   ],
-  "executionRoleArn": "arn:aws:iam::<YourAccountID>:role/puccio-ecs-executionrole",
+  "executionRoleArn": "arn:aws:iam::<YourAccountID>:role/petstoreExecutionRole",
   "requiresCompatibilities": [
     "FARGATE"
   ],
