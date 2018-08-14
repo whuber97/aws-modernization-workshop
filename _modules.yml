@@ -6,4 +6,6 @@ modules:
   modules_container-orchestration_readme:
     name: Container Orchestration
   modules_artifactory_readme:
-    name: Artifactory    
+    name: Artifactory   
+  modules_continuous-integration_readme:
+    name: Continuous Integration 
