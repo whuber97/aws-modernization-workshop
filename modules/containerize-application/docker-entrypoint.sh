@@ -12,5 +12,3 @@ done;
 echo PostgreSQL server $DB_HOST is ready on $DB_PORT - starting wildfly /opt/jboss/wildfly/bin/standalone.sh;
 
 exec sh /opt/jboss/wildfly/bin/standalone.sh "$@"
-
-exec "$@"
