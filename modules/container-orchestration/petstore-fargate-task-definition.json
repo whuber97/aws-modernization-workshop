@@ -4,8 +4,8 @@
   "containerDefinitions": [{
       "name": "postgres",
       "image": "<YourAccountID>.dkr.ecr.us-west-2.amazonaws.com/petstore_postgres:latest",
-      "cpu": 192,
-      "memoryReservation": 512,
+      "cpu": 512,
+      "memoryReservation": 1024,
       "environment": [{
           "name": "POSTGRES_DB",
           "value": "petstore"
@@ -34,8 +34,8 @@
     {
       "name": "petstore",
       "image": "<YourAccountID>.dkr.ecr.us-west-2.amazonaws.com/petstore_frontend:latest",
-      "cpu": 64,
-      "memoryReservation": 512,
+      "cpu": 512,
+      "memoryReservation": 1024,
       "environment": [
         {
           "name": "DB_HOST",
@@ -79,6 +79,6 @@
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "cpu": ".25 vcpu",
-  "memory": "1 gb"
+  "cpu": "1 vcpu",
+  "memory": "2 gb"
 }

@@ -34,9 +34,15 @@ COPY --from=build /usr/src/app/target/applicationPetstore.war /opt/jboss/wildfly
 # copy our configuration
 COPY ./standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
+# install nc for entrypoint script and copy the entrypoint script
+USER root
+RUN yum install nc -y
+USER jboss
+COPY ./docker-entrypoint.sh /opt/jboss/docker-entrypoint.sh
+
 # expose the application port and the management port
 EXPOSE 8080 9990
 
 # run the application
-ENTRYPOINT [ "/opt/jboss/wildfly/bin/standalone.sh" ]
+ENTRYPOINT [ "/opt/jboss/docker-entrypoint.sh" ]
 CMD [ "-b", "0.0.0.0", "-bmanagement", "0.0.0.0" ]
