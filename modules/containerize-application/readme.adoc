@@ -21,7 +21,7 @@ The Pet Store application is a Java 7 based application that runs on top of the 
 
 ==== Building the Dockerfile
 
-1. To get started, switch to the `containerize-application` folder within this repository. Then create a new file `Dockerfile`. Then open the Dockerfile in your editor of choice.
+1. To get started, switch to the `containerize-application` folder within this repository. Then open the `Dockerfile` in your editor of choice.
 
 2. The first stage of our `Dockerfile` will be to build the application. We will use the `maven:3.5-jdk-7` container from Docker Hub as our base image. The first stage of our `Dockerfile` will need to copy the code into the container, install the dependencies, then build the application using Maven.
 
@@ -73,7 +73,7 @@ COPY ./app /usr/src/app
 RUN mvn package -Dmaven.test.skip=true
 ----
 
-Next, in the same `Dockerfile` we create a new stage called "application." Then from the build stage, we copy the WAR file we compiled to the Wildfly deployments folder. Wildfly will deploy this WAR on boot. We then expose port 8080 for our application and port 9990 for Wildfly management. We then define the command to start the application.
+Next, in the same `Dockerfile` we create a new stage called "application." Then from the build stage, we copy the WAR file we compiled to the Wildfly deployments folder. Wildfly will deploy this WAR on boot. We then expose port 8080 for our application and port 9990 for Wildfly management. We then set up the prerequisites for the ENTRYPOINT script to start the application.
 
 [source,shell]
 ----
@@ -93,6 +93,12 @@ RUN /bin/sh -c '$JBOSS_HOME/bin/standalone.sh &' \
 # copy war file from build layer to application layer
 COPY --from=build /usr/src/app/target/applicationPetstore.war /opt/jboss/wildfly/standalone/deployments/applicationPetstore.war
 
+# install nc for entrypoint script and copy the entrypoint script
+USER root
+RUN yum install nc -y
+USER jboss
+COPY ./docker-entrypoint.sh /opt/jboss/docker-entrypoint.sh
+
 # copy our configuration
 COPY ./standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
@@ -111,17 +117,17 @@ Before you can run this in a Cloud9 environment you will need to install `docker
 
 [source,shell]
 ----
-sudo curl -L https://github.com/docker/compose/releases/download/1.9.0/docker-compose-`uname -s`-`uname -m` | sudo tee /usr/local/bin/docker-compose > /dev/null
+sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ----
 
 Next, we need to define how our application will run. Docker comes with a tool called Docker Compose that allows you to orchestrate mutliple containers.
 
-1. Create a new file called `docker-compose.yml`. To start your file should look like this:
+1. Open the file called `docker-compose.yml`. Let's review the contents. To start your file should look like this:
 
 [source,yaml]
 ----
-version: '3'
+version: '3.4'
 
 services:
 ----
@@ -130,7 +136,7 @@ services:
 
 [source,yaml]
 ----
-version: '3'
+version: '3.4'
 
 services:
 
@@ -167,7 +173,7 @@ services:
 
 [source,yaml]
 ----
-version: '3'
+version: '3.4'
 
 services:
 
