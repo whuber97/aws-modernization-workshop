@@ -9,6 +9,7 @@
 * Deploy an application To ECS/Fargate and EKS and show the difference 300 level
 
 *Lab Requirements:*
+
 * an Amazon Elastic Container Service Cluster
 * an Amazon Elastic Container Service for Kubernetes Cluster
 
@@ -568,6 +569,10 @@ items:
         containers:
         - name: frontend
           image: <YourAccountID>.dkr.ecr.us-west-2.amazonaws.com/petstore_frontend:latest
+          resources:
+            requests:
+              memory: "512m"
+              cpu: "512m"
           ports:
           - name: http-server
             containerPort: 8080
