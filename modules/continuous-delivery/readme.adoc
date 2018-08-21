@@ -1,0 +1,63 @@
+= Digital Modernization
+
+:imagesdir: ../../images
+
+== Continuous Delivery (CD)
+
+****
+*Expected Outcome:*
+
+* Deploy AWS CodePipeline
+* Deploy AWS CodeBuild
+* Create & Configure Custom Action
+
+*Lab Requirements*
+
+* Complete Continuous Integration (CI) lab
+* Launch Artifactory lab CloudFormation template
+
+*Average Lab Time:*
+45-60 minutes
+****
+
+=== Introduction
+
+The examples presented in this lab are based on Erin McGill's blog post https://aws.amazon.com/blogs/devops/integrating-jfrog-artifactory-with-aws-codepipeline/[Integrating JFrog Artifactory with AWS CodePipeline]. In this lab, we will use AWS CloudFormation to create our environment and provision various resources (e.g.  https://aws.amazon.com/codepipeline/[AWS CodePipeline]AWS CodePipeline, https://aws.amazon.com/codebuild/[AWS CodeBuild], IAM roles & policies, and an EC2 auto scaling group & launch configuration) onto our AWS account. 
+
+It is expected that you have a fully functional JFrog Artifactory installation as well as a source code repository. If you followed the previous _Artifactory_ and _Continuous Integration_ labs, these environments are already provisioned in your AWS account. If you have not completed those labs, please do so before continuing with this lab.
+
+In this lab, we will launch a CloudFormation template `continuous-delivery.yaml` which creates the CodeBuild project, the custom action, and CodePipeline. This template will also launch an Amazon EC2 job worker within an AWS Auto Scaling Group along with the requisite IAM roles and policies. 
+
+Prerequisites for this template:
+
+* An Existing AWS CodeCommit repository. 
+* An Amazon S3 bucket containing a zip archive of the job worker code.
+* An Amazon S3 bucket to be used for the output artifacts from AWS CodePipeline. 
+* An Artifactory host
+* An exiting Amazon VPC. If you need to build a new one, you can use the https://github.com/aws-quickstart/quickstart-aws-vpc[AWS VPC QuickStart].
+
+=== AWS CodePipeline Workflow
+
+image::cd-01.png[cd]
+
+The pipeline for this project begin with a change to the source code committed to your private code repository. In this case, this is the AWS CodeCommit repository we created in the _Continuous Integration_ lab. Upon commiting the code, CodePipeline will trigger AWS CodeBuild to compile the source code. Once the build process completes, CodePipeline triggers the custom action job worker to commit the build artifact to our artifact repository (e.g. JFrog Artifactory).
+
+The CodePipleine creates 3 stages:
+
+. A Source stage configured for the CodeCommit repository
+. A Build stage configured with the CodeBuild project
+. A Deploy stage configured for the Custom Action defined for the Artifactory repository.
+
+The launch configuration for the Custom Worker installs the appropriate packages, pulls the zip archive of the worker code from the S3 bucket, and runs the worker python script that polls the CodePipeline for jobs.
+
+=== Getting Started
+
+Steps to Create an AWS CodePipeline, CodeBuild, and Custom Action
+
+Step 1:: Go to the https://console.aws.amazon.com/[AWS console] and select *CloudFormation*. and click *Create Stack*. The following page is displayed.
+
+image::artifactory-01.png[cd]
+
+Step 2:: Upload the _conitinuous-delivery.yaml_  file which is the Continuous Integration CloudFormation template. Click *Next*. 
+
+image::cd-02.png[cd]
