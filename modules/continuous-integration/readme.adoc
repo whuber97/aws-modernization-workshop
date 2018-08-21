@@ -1,0 +1,115 @@
+= Digital Modernization
+
+:imagesdir: ../../images
+
+== Continuous Integration (CI)
+
+****
+*Expected Outcome:*
+
+* Deploy AWS CodeCommit
+* Deploy AWS Cloud9 integrated development environment
+
+*Lab Requirements:*
+None
+
+*Average Lab Time:*
+45-60 minutes
+****
+
+=== Introduction
+
+In this module, we will provision our development environment as well as our source control service. We will use https://aws.amazon.com/cloud9[AWS Cloud9] as our cloud-based integrated development environment (IDE) and https://aws.amazon.com/codecommit[AWS CodeCommit] as our fully-managed https://aws.amazon.com/devops/source-control/[source control] service.
+
+https://aws.amazon.com/devops/continuous-integration[Continuous integration] is a software development practice where developers merge code into a central repository on a frequent basis. Historically, while developers collaborating on a project may have faced challenges merging code changes as a result of working in isolation for extended periods of time, this is further exacerbated in today's distributed computing landscape at a global scale. Thus, necessitating adoption to this methodology but also tools that enable automatic builds and runs of unit tests on new code changes.
+
+Further, we recommend Cloud9 as a natural extension of this process. Providing developers with a cloud-based IDE allows for greater accessibility since all that is required for work is an internet connection and a web browser. Collaborating on code with team members in real-time is simple and you can share your development environment with a few clicks. The Cloud9 environment comes prepackaged with various tools for languages such as NodeJS, Python, Java, and more, allowing you to build serverless applications with ease.
+
+These services can be easily launched using the AWS console. However, for this lab, we will save additional time and provision these using a CloudFormation template. 
+
+.continuous-integration.yaml
+[source,yaml]
+----
+Resources:
+  CCRepository:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryName:
+        Ref: CCRepo
+  CloudNine:
+    Type: AWS::Cloud9::EnvironmentEC2
+    DependsOn: CCRepository
+    Properties:
+      Name:
+        Ref: Cloud9EnvName
+      InstanceType:
+        Ref: InstanceType
+      SubnetId:
+        Ref: SubnetID
+      Repositories:
+      - PathComponent:
+          Fn::GetAtt: CCRepository.Name
+        RepositoryUrl:
+          Fn::GetAtt: CCRepository.CloneUrlHttp
+----
+
+This template will create an AWS CodeCommit repository as well as a Cloud9 environment. Additionally, the newly created CodeCommit repo will be automatically cloned within your IDE allowing you to quickly start your work.
+
+==== Getting Started
+
+Steps to Create an AWS CodeCommit repository and Cloud9 IDE
+
+Step 1:: Go to the https://console.aws.amazon.com/[AWS console] and select *CloudFormation*. and click *Create Stack*. The following page is displayed.
+
+image::artifactory-01.png[ci]
+
+Step 2:: Upload the _conitinuous-integration.yaml_  file which is the Continuous Integration CloudFormation template. Click *Next*. 
+
+image::ci-01.png[ci]
+
+Step 3:: Provide a name for your stack (e.g. ci-lab) as well as a name for your CodeCommit repository (e.g. aws_pet_store_repo). Additionally, name your Cloud9 environment, select the EC2 instance type and VPC and Subnet. For this lab, it is recommended that you accept the defaults and select a subnet that is publicly accessible. Click *Next*.
+
+image::ci-02.png[ci]
+
+Step 4:: Confirm your stack options and click *Next*. 
+
+image::ci-03.png[ci]
+
+Step 5:: Confirm stack review and click *Create*. 
+
+image::ci-04.png[ci]
+
+You can view the status by viewing the *Events* tab. Upon successful completion you should see a *CREATE_COMPLETE* message.
+
+image::ci-05.png[ci]
+
+*Note:* You will notice that the template will appear as two entries within your CloudFormation console. The Cloud9 environment will launch as a nested template and therefore will be listed as a child of the _ci-lab_ stack. It is *_recommended_* that when deleting the stack, you do so from the parent _ci-lab_ template as this will delete all resources including the Cloud9  template.
+
+image::ci-06.png[ci]
+
+The *Outputs* tab will display the clone URL for your newly created AWS CodeCommit repository. For this lab, this is available for informational purposes as the repo will already be cloned in your Cloud9 environment.
+
+==== Launching and Configuring your Cloud9 environment
+
+Step 1:: Go to the https://console.aws.amazon.com/cloud9[Cloud9 console] and click *Open IDE* for your newly created instance.
+
+image::ci-07.png[ci]
+
+Step 2:: When you launch Cloud9 for the first time, the instance will initialize and configuration tasks defined in the CloudFormation template will be invoked as a `shell` script. You will see an environment that looks like Figure 1.
+
+.Cloud 9 environment
+image::ci-08.png[ci]
+
+At the bottom of the screen you will see a `bash` terminal with a few informational messages:
+
+[source,shell]
+----
+Cloning into '/home/ec2-user/environment/aws_pet_store_repo'...
+warning: You appear to have cloned an empty repository.
+Navigate to your cloned repository by typing "cd /home/ec2-user/environment/aws_pet_store_repo" to start working with "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/aws_pet_store_repo"
+
+To set your display name run "git config --global user.name YOUR_USER_NAME"
+To set your display email run "git config --global user.email YOUR_EMAIL_ADDRESS"
+----
+
+You may configure git by running `git config`. When you are ready to begin, type `cd /home/ec2-user/environment/aws_pet_store_rep` in the terminal prompt and *return* key.
