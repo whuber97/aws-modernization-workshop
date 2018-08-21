@@ -26,7 +26,7 @@ The Pet Store application is a Java 7 based application that runs on top of the 
 2. The first stage of our `Dockerfile` will be to build the application. We will use the `maven:3.5-jdk-7` container from Docker Hub as our base image. The first stage of our `Dockerfile` will need to copy the code into the container, install the dependencies, then build the application using Maven.
 
 3. The second stage of our `Dockerfile` will be to build our Wildfly application server. We will need to copy the WAR file we created in the first stage to the second stage. The WAR file is built to `/usr/src/app/target/applicationPetstore.war` in the first stage. We will need to copy that WAR file to the `/opt/jboss/wildfly/standalone/deployments/applicationPetstore.war`. We will also need to copy the `standalone.xml` file to the proper location `/opt/jboss/wildfly/standalone/configuration/standalone.xml`. Wildfly will deploy that application on boot. You will also need to install the PostgreSQL driver which is already downloaded. Include the script below to install.
-
++
 [source,shell]
 ----
 # install postgresql support
@@ -124,16 +124,16 @@ sudo chmod +x /usr/local/bin/docker-compose
 Next, we need to define how our application will run. Docker comes with a tool called Docker Compose that allows you to orchestrate mutliple containers.
 
 1. Open the file called `docker-compose.yml`. Let's review the contents. To start your file should look like this:
-
++
 [source,yaml]
 ----
 version: '3.4'
 
 services:
 ----
-
++
 2. Create the PostgreSQL service. The PostgreSQL service will run our database. We will use the official PostgreSQL image available from Docker Hub. Next, we will map the PostgreSQL port `5432` to the our machine port for easy access. Finally, we will define a few environment variables to configure our instance.
-
++
 [source,yaml]
 ----
 version: '3.4'
@@ -149,9 +149,9 @@ services:
       - 'POSTGRES_USER=admin'
       - 'POSTGRES_PASSWORD=password'
 ----
-
++
 3. Finally, we will define our Pet Store application. Docker Compose supports building containers as well, so we will use a special syntax for defining this container. In our yaml file we will create a new service called `petstore` and configure our build configuration. Next, will add a `depends_on` config so that the `petstore` container boots after our `postgres` container. Similar to our `postgres` ports we will map port 8080 to our machine for easy access. Now we will use some environment variables to configure our database with the application.
-
++
 [source,yaml]
 ----
   petstore:
@@ -168,9 +168,9 @@ services:
       - 'DB_USER=admin'
       - 'DB_PASS=password'
 ----
-
++
 4. Our final, file should look as follows.
-
++
 [source,yaml]
 ----
 version: '3.4'
@@ -207,24 +207,24 @@ services:
 To run the application we will execute the following Docker Compose commands.
 
 1. Run the database container in the background (`-d` or daemon flag). We don't need the database logs to clog our application logs.
-
++
 [source,shell]
 ----
 docker-compose up -d postgres
 ----
-
++
 2. Build out petstore service.
-
++
 [source,shell]
 ----
 docker-compose build petstore
 ----
-
++
 3. Run the application container in the foreground and live stream the logs to stdout. If you hit an error hit `Ctrl+C`, make updates to the Dockerfile and re-build the container using step 2.
-
++
 [source,shell]
 ----
 docker-compose up petstore
 ----
-
++
 4. Visit http://localhost:8080/applicationPetstore to view the application.
