@@ -169,16 +169,14 @@ cdb3f9544e4c: Layer already exists
 latest: digest: sha256:ca39b6107978303706aac0f53120879afcd0d4b040ead7f19e8581b81c19ecea size: 3243
 ....
 +
-7. Now you need to do the same thing with the petstore frontend. Tag the containerize-application_petstore image so you can push the image 
-to the ECR repository. Note: You need to replace the value from the repositoryURI for petstore_postgres previously.
+7. Now you need to do the same thing with the petstore frontend. Tag the containerize-application_petstore image so you can push the image to the ECR repository. Note: You need to replace the value from the repositoryURI for petstore_frontend previously.
 +
 [source,shell]
 ----
 docker tag containerize-application_petstore:latest 123456789012.dkr.ecr.us-west-2.amazonaws.com/petstore_frontend:latest
 ----
 +
-8. Run the following command to push this image to the ECR repository. Note: You need to replace the value with
-the tag you applied in the previous step.
+8. Run the following command to push this image to the ECR repository. Note: You need to replace the value with the tag you applied in the previous step.
 +
 [source,shell]
 ----
@@ -210,13 +208,12 @@ latest: digest: sha256:1752fbb6c9d826148ef790c5ac4f99fcc2b48a5744543ba4c58a7edf3
 
 ===== Amazon ECS Task definitions
 
-https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html[Amazon ECS Task definitions] are required to run Docker containers in Amazon ECS.
-For our pestore application, we will review the key pieces of a task definition before we deploy it. 
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html[Amazon ECS Task definitions] are required to run Docker containers in Amazon ECS. For our pestore application, we will review the key pieces of a task definition before we deploy it. 
 
 1. Switch to the tab where you have your Cloud9 environment opened.
-
++
 2. Open the *petstore-fargate-task-definition.json* file by double clicking the filename in the lefthand navigation in Cloud9.
-
++
 3. The file has the following contents:
 +
 .petstore-fargate-task-definition.json
@@ -228,8 +225,8 @@ For our pestore application, we will review the key pieces of a task definition 
   "containerDefinitions": [{
       "name": "postgres",
       "image": "<YourAccountID>.dkr.ecr.us-west-2.amazonaws.com/petstore_postgres:latest",
-      "cpu": 192,
-      "memoryReservation": 512,
+      "cpu": 512,
+      "memoryReservation": 1024,
       "environment": [{
           "name": "POSTGRES_DB",
           "value": "petstore"
@@ -258,8 +255,8 @@ For our pestore application, we will review the key pieces of a task definition 
     {
       "name": "petstore",
       "image": "<YourAccountID>.dkr.ecr.us-west-2.amazonaws.com/petstore_frontend:latest",
-      "cpu": 64,
-      "memoryReservation": 512,
+      "cpu": 512,
+      "memoryReservation": 1024,
       "environment": [
         {
           "name": "DB_HOST",
@@ -303,8 +300,8 @@ For our pestore application, we will review the key pieces of a task definition 
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "cpu": ".25 vcpu",
-  "memory": "1 gb"
+  "cpu": "1 vcpu",
+  "memory": "2 gb"
 }
 ----
 +
@@ -320,61 +317,60 @@ aws ecs register-task-definition --cli-input-json file://~/environment/aws-moder
 ===== Create the Petstore Service with Amazon ECS using Fargate
 
 1. Go to the AWS Management Console, click Services then select *Elastic Container Service* under Compute.
-
++
 2. On the left hand navigation ensure *Clusters* is selected and click *Create Cluster*.
-
++
 3. On the *Select cluster template* screen select *Networking only* which should have a *Powered by AWS Fargate* label and click *Next step*.
-
++
 4. Enter a Cluster name of *petstore-workshop* and leave the Create VPC box *unchecked* and click *Create*.
-
++
 5. Once your cluster is created, view your cluster and the *Services* tab should be seleced. Click *Create*.
-
++
 6. Select a *Launch type* of *FARGATE*
-
++
 7. Select *petstore* and the latest *revision* for the *Task Definition*.
-
++
 8. Enter *petstore* for the *Service name*.
-
++
 9. Enter *1* into *Number of tasks* and click *Next step*.
-
++
 10. Select the *petstore* VPC for *Cluster VPC*.
-
++
 11. Select the two *Public* petstore Subnets for *Subnets*.
-
-12. For *Security Groups* click *Edit* then click *Select an existing Security Group*. Select the *default* Security Group and click Save. You will notice that 
-the default Security Group only allows port 8080 from PetStoreLbSecurityGroup to secure our petstore application.
-
++
+12. For *Security Groups* click *Edit* then click *Select an existing Security Group*. Select the *default* Security Group and click Save. You will notice that the default Security Group only allows port 8080 from PetStoreLbSecurityGroup to secure our petstore application.
++
 13. Select *ENABLED* from *Auto-assign public IP*. This allows your tasks to retrieve the Docker image from Amazon ECR and stream logs to Amazon CloudWatch Logs.
-
++
 14. Set the *Health check grace period* to *300*. Note: This is the period of time, in seconds, that the Amazon ECS service scheduler should ignore unhealthy 
 Elastic Load Balancing target health checks after a task has first started. This is only valid if your service 
 is configured to use a load balancer. If your service's tasks take a while to start and respond to health checks, 
 you can specify a health check grace period of up to 7,200 seconds during which the ECS service scheduler ignores the health check status. 
 This grace period can prevent the ECS service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
-
++
 15. Under Load Balancing, select the Application Load Balancer and make sure *petstore-lb* is selected.
-
++
 16. For *Container to load balance* select *petstore:8080:8080* and click *Add to load balancer*.
-
++
 17. Type in 80 for the *Listener port* and ensure it is set to *create new*.
-
++
 18. Ensure that *Target group name* is set to *create new* and the name should be *ecs-petsto-petstore.
-
++
 19. *Uncheck* the box for *Enable service discovery integration* and click *Next step*.
-
++
 20. The next page allows you to define an Auto Scaling policy. Leave this set to *Do not adjust the service's desired count* for now and click *Next step*.
-
++
 21. Review your settings and click *Create Service*.
-
++
 22. The service will now start your task. Click *View Service* and you will have to wait for your task to transition to *RUNNING*. Feel free to inspect the logs for your task while you wait.
-
++
 23. Once the task is running, view the *Details* of the petstore *Service*. Under *Load Balancing* click the *ecs-petsto-petstore* Target Group link to view 
 the Tasks being registerd into the Target Group under *Targets*.
-
++
 24. Once your Registerd Target is registered as *Healthy* you can view the service through the Application Load Balancer.
-
++
 25. Click on the *Load Balancing* link on the left hand navigation pane of the EC2 window to view your Application Load Balancer.
-
++
 26. For the *petstore-lb* copy the *DNS name* and navigate to http://<InsertYourCopiedDNSName>/applcationPetstore to see the petstore application running. 
 
 
