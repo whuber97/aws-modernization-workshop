@@ -12,7 +12,7 @@
 *Lab Requirements:*
 None
 
-*Average Lab Time:* 
+*Average Lab Time:*
 30-45 minutes
 ****
 
@@ -22,6 +22,10 @@ The Pet Store application is a Java 7 based application that runs on top of the 
 ==== Building the Dockerfile
 
 1. To get started, switch to the `containerize-application` folder within this repository. Then open the `Dockerfile` in your editor of choice.
+[source,bash]
+----
+cd ~/environment/aws-modernization-workshop/modules/containerize-application/
+----
 
 2. The first stage of our `Dockerfile` will be to build the application. We will use the `maven:3.5-jdk-7` container from Docker Hub as our base image. The first stage of our `Dockerfile` will need to copy the code into the container, install the dependencies, then build the application using Maven.
 
@@ -121,7 +125,7 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 ----
 
-Next, we need to define how our application will run. Docker comes with a tool called Docker Compose that allows you to orchestrate mutliple containers.
+Next, we need to define how our application will run. Docker comes with a tool called Docker Compose that allows you to orchestrate multiple containers.
 
 1. Open the file called `docker-compose.yml`. Let's review the contents. To start your file should look like this:
 +
