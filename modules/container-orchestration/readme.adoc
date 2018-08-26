@@ -185,7 +185,7 @@ latest: digest: sha256:ca39b6107978303706aac0f53120879afcd0d4b040ead7f19e8581b81
 ....
 +
 6. Now you need to do the same thing with the petstore frontend. Tag the containerize-application_petstore image so you can push the image
-to the ECR repository. Note: You need to replace the value from the repositoryURI for petstore_postgres previously.
+to the ECR repository. Note: You need to replace the value from the repositoryURI for petstore_frontend previously.
 +
 [source,shell]
 ----
