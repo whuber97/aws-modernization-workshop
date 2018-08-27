@@ -193,3 +193,14 @@ Resources:
       Type: "application"
       IpAddressType: "ipv4"
     DependsOn: PetStoreLbSecurityGroup
+Outputs:
+  VPC:
+    Description: VPC ID
+    Value: !Ref PubPrivateVPC  
+  Subnet1:
+    Description: Subnet1 ID
+    Value: !Ref PublicSubnet1  
+  Subnet2:
+    Description: Subnet2 ID
+    Value: !Ref PublicSubnet1  
+
