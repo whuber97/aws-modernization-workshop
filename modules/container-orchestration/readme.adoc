@@ -52,13 +52,13 @@ cd ~/environment/aws-modernization-workshop/modules/container-orchestration
 ----
 +
 2. Deploy the CloudFormation template
-[source,bash]
+[source,shell]
 ----
 aws cloudformation create-stack --stack-name "petstore" --template-body file://petstore-fargate-cf-resources.yaml --capabilities CAPABILITY_NAMED_IAM
 ----
 +
 3. Wait for the Template to finish deploying
-[source,bash]
+[source,shell]
 ----
 until [[ `aws cloudformation describe-stacks --stack-name "petstore" --query "Stacks[0].[StackStatus]" --output text` == "CREATE_COMPLETE" ]]; do  echo "The stack is NOT in a state of CREATE_COMPLETE at `date`";   sleep 30; done && echo "The Stack is built at `date` - Please proceed"
 ----
@@ -325,7 +325,7 @@ For our pestore application, we will review the key pieces of a task definition 
 ----
 +
 4. Replace the *<YourAccountID>* placeholders with your https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html[Account ID].
-[source,bash]
+[source,shell]
 ----
 ACCOUNT_ID=$(aws ecr describe-repositories --repository-name petstore_frontend --query=repositories[0].repositoryUri --output=text | cut -d"." -f1)
 echo ${ACCOUNT_ID}
@@ -398,7 +398,7 @@ the Tasks being registerd into the Target Group under *Targets*.
 25. Click on the *Load Balancing* link on the left hand navigation pane of the EC2 window to view your Application Load Balancer.
 +
 26. Get the URL for your running application
-[source,bash]
+[source,shell]
 ----
 printf "http://%s/applicationPetstore\n" $(aws elbv2 describe-load-balancers --names="petstore-lb" --query="LoadBalancers[0].DNSName" --output=text)
 ----
