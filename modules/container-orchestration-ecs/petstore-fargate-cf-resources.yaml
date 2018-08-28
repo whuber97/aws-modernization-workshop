@@ -4,14 +4,6 @@ Resources:
     Properties:
       LogGroupName: "petstore"
       RetentionInDays: 30
-  PetStorePostgreSQLRepository:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: "petstore_postgres"
-  PetStoreFrontendRepository:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: "petstore_frontend"
   ECSExecutionRole:
     Type: AWS::IAM::Role
     Properties:
