@@ -3,8 +3,12 @@ modules:
     name: Getting Started
   modules_containerize-application_readme:
     name: Containerize Application
-  modules_container-orchestration_readme:
-    name: Container Orchestration
+  modules_container-registry_readme:
+    name: Container Registry
+  modules_container-orchestration-ecs_readme:
+    name: Amazon ECS & Fargate
+  modules_container-orchestration-eks_readme:
+    name: Amazon EKS
   modules_artifactory_readme:
     name: Artifactory
   modules_cicd_readme:
