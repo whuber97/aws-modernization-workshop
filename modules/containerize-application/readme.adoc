@@ -23,7 +23,7 @@ The Pet Store application is a Java 7 based application that runs on top of the 
 
 1. To get started, switch to the `containerize-application` folder within this repository. Then open the `Dockerfile` in your editor of choice.
 +
-[source,bash]
+[source,shell]
 ----
 cd ~/environment/aws-modernization-workshop/modules/containerize-application/
 ----

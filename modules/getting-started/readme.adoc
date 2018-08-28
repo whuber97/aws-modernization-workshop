@@ -8,7 +8,7 @@ In order for you to succeed in this workshop, we need you to run through a few s
 
 === Update and install some tools.
 The first step is to update the `AWS CLI`,`pip` and a range of pre-installed packages.
-[source,bash]
+[source,shell]
 ----
 sudo yum update -y && pip install --upgrade --user awscli pip
 exec $SHELL
@@ -17,7 +17,7 @@ exec $SHELL
 === Configure the AWS Environment
 After you have the installed the latest `awscli` and `pip` we need to configure
 our environment a little
-[source,bash]
+[source,shell]
 ----
 aws configure set region us-west-2
 ----
@@ -37,7 +37,7 @@ image::cloud9-credentials.png[Cloud9 Managed Credentials]
 Following that we'll need to update the instance role to equal the one
 preprovisioned for you.
 
-[source,bash]
+[source,shell]
 ----
 aws ec2 associate-iam-instance-profile \
   --instance-id $(aws ec2 describe-instances \
@@ -50,7 +50,7 @@ aws ec2 associate-iam-instance-profile \
 
 === Clone the source repository for this workshop.
 Now we want to clone the repository that contains all the content and files you need to complete this workshop.
-[source,bash]
+[source,shell]
 ----
 cd ~/environment
 git clone https://github.com/mandusm/aws-modernization-workshop.git
@@ -61,7 +61,7 @@ During the workshop we will be using a couple of third party `CLI` tools like `e
 
 Step 1::
 Let's make a `bin` folder where these binaries will be stored and change our directory to the new location.
-[source,bash]
+[source,shell]
 ----
 mkdir ~/bin
 cd ~/bin
@@ -84,14 +84,14 @@ It takes a few minutes to launch an EKS cluster, so we will have you launch one 
 
 Step 1::
 `eksctl` requires a SSH Key to configure your EKS nodes with.
-[source,bash]
+[source,shell]
 ----
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa
 ----
 
 Step 2::
 Now that we have the key, let's launch the EKS Cluster.
-[source,bash]
+[source,shell]
 ----
 eksctl create cluster --full-ecr-access --name=petstore
 ----
