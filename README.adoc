@@ -6,13 +6,13 @@ To test any changes you have made locally make sure you have docker installed. M
 
 === Run the following commands.
 .docker login
-[source,bash]
+[source,shell]
 ----
 eval `aws ecr get-login --no-include-email --region us-east-1`
 ----
 
 .docker image pull
-[source,bash]
+[source,shell]
 ----
 docker pull 755152575036.dkr.ecr.us-east-1.amazonaws.com/aws-workshopper:latest
 ----
@@ -20,7 +20,7 @@ docker pull 755152575036.dkr.ecr.us-east-1.amazonaws.com/aws-workshopper:latest
 Make sure you are in this repository root.
 
 .docker run
-[source,bash]
+[source,shell]
 ----
 docker run --rm -ti \
            -p 8080:8080 \
