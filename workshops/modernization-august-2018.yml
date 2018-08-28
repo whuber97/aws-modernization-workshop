@@ -12,5 +12,8 @@ modules:
   activate:
   - "modules_getting-started_readme"
   - "modules_containerize-application_readme"
-  - "modules_container-orchestration_readme"
   - "modules_artifactory_readme"
+  - "modules_container-orchestration_readme"
+  - "modules_monitor-application_readme"
+  - "modules_cicd_readme"
+  - "modules_security_readme"
