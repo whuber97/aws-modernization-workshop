@@ -6,6 +6,10 @@ modules:
   modules_container-orchestration_readme:
     name: Container Orchestration
   modules_artifactory_readme:
-    name: Artifactory   
-  modules_continuous-integration_readme:
-    name: Continuous Integration 
+    name: Artifactory
+  modules_cicd_readme:
+    name: Automation
+  modules_monitor-application_readme:
+    name: Application Monitoring
+  modules_security_readme:
+    name: Security Practices
