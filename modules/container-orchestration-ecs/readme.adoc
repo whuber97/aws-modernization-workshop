@@ -55,7 +55,7 @@ cd ~/environment/aws-modernization-workshop/modules/container-orchestration-ecs
 [source,shell]
 ----
 aws cloudformation create-stack \
-  --stack-name "petstore" 
+  --stack-name "petstore" \
   --template-body file://petstore-fargate-cf-resources.yaml \
   --capabilities CAPABILITY_NAMED_IAM
 ----
