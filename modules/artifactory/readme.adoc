@@ -126,7 +126,7 @@ ART_IP=$(aws ec2 describe-network-interfaces --network-interface-ids=$(aws ecs d
 Step 2:: Add the IP to our settings.xml
 [source,shell]
 ----
-sed -i "s/<artifact-ip>/$ART_IP/" modules/artifactory/settings.xml
+sed -i "s/<artifact-ip>/$ART_IP/" settings.xml
 ----
 
 Step 3:: Make some modifications to Dockerfile
@@ -178,4 +178,3 @@ docker-compose build petstore
 ----
 
 With the container rebuilt using the Artifactory repositories we're ready to move on to the next module.
-
