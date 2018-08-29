@@ -43,12 +43,6 @@ For more detail regarding Clair see https://github.com/coreos/clair[https://gith
 
 ==== Getting Started with Clair container image scanner.
 
-To get started, switch to the Security folder within this repository. Then open the Dockerfile in your editor of choice.
-----
-cd ~/environment/aws-modernization-workshop/modules/Security/
-----
-
-
 Steps to Deploy Clair using a CloudFormation template via CLI:
 
 Step 1:: Switch to the tab where you have your Cloud9 environment opened and change to this modules directory by running:
@@ -57,6 +51,17 @@ cd ~/environment/aws-modernization-workshop/modules/security
 ----
 
 Step 2:: Get the VPC and subnet details from the petstore stack launched in the container orchestration module
+----
+aws cloudformation list-stacks
+----
+
+If these VPC stack has been pre build for you you will see a stack EKS-petstore-VPC.
+----
+aws cloudformation describe-stacks --stack-name EKS-petstore-VCP
+----
+
+OR:: Should this not be the case you will see a stack called petstore
+
 ----
 aws cloudformation describe-stacks --stack-name petstore
 ----
@@ -68,6 +73,13 @@ Step 3:: Deploy the CloudFormation template.
 Edit the following command adding the VPC and Subnet IDs collected in step 2.
 ----
 aws cloudformation create-stack --stack-name "clair" --template-body file://clair-existing-vpc.yaml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=VPC,ParameterValue='<YOUR VPC ID>' ParameterKey=Subnet1,ParameterValue='<YOUR SUBNET1 ID>' ParameterKey=Subnet2,ParameterValue='<YOUR SUBNET2 ID>' ParameterKey=ClairDBPassword,ParameterValue='<PASSWORD FOR THE CLAIR DATABSE>'
+----
+
+Step 4:: Optional: check if the stack has completed, you do not need to wait for this you can proceed with next steps while this builds.
+
+----
+until [[ `aws cloudformation describe-stacks --stack-name "Clair" --query "Stacks[0].[StackStatus]" --output text` == "CREATE_COMPLETE" ]]; do  echo "The stack is NOT in a state of CREATE_COMPLETE at `date`";   sleep 30; done && echo "The Stack is built at `date` - Please proceed"
+
 ----
 
 Steps to Deploy Clair using a Cloudformation template via the AWS web console: 
@@ -135,7 +147,7 @@ aws ec2 describe-network-interfaces --network-interface-ids=$(aws ecs describe-t
 This IP will be combined with the tcp port 6060 (e.g. x.x.x.x:6060).
 
 
-Step 6:: Manual scan of container image in Dockerhub.
+Step 6:: Manual scan of container image in Dockerhub (this step will require the Clair CloudFormation stack launched above to be in a Create Complete State).
 
 ----
 CLAIR_ADDR=<YOUR CLAIR FARGATE INSTACE IP >:6060 ./klar debian:9
