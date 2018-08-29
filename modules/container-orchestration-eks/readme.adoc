@@ -288,7 +288,7 @@ postgres-678864b7-vs5zj     0/1       ContainerCreating   5          3m
 +
 [source,shell]
 ----
-kubectl get services --namespace petstore
+kubectl get services --namespace petstore -o wide
 ----
 +
 [.output]
