@@ -235,4 +235,4 @@ docker-compose up petstore
 4. To preview the application you will need to click *Preview* from the top
    menu of the Cloud9 environment.
 
-5. Then navigate to `/applicationPetstore` to view the application.
+5. Then navigate to `/applicationPetstore/` to view the application. _note: The trailing slash is required._
