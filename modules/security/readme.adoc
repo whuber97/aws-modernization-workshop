@@ -50,36 +50,16 @@ Step 1:: Switch to the tab where you have your Cloud9 environment opened and cha
 cd ~/environment/aws-modernization-workshop/modules/security
 ----
 
-Step 2:: Get the VPC and subnet details from the petstore stack launched in the container orchestration module
-----
-aws cloudformation list-stacks
-----
-
-If these VPC stack has been pre build for you you will see a stack EKS-petstore-VPC.
-----
-aws cloudformation describe-stacks --stack-name EKS-petstore-VCP
-----
-
-OR:: Should this not be the case you will see a stack called petstore
+Step 2:: Deploy the CloudFormation template.
 
 ----
-aws cloudformation describe-stacks --stack-name petstore
-----
-
-Note the values in the Outputs section.
-
-Step 3:: Deploy the CloudFormation template.
-
-Edit the following command adding the VPC and Subnet IDs collected in step 2.
-----
-aws cloudformation create-stack --stack-name "clair" --template-body file://clair-existing-vpc.yaml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=VPC,ParameterValue='<YOUR VPC ID>' ParameterKey=Subnet1,ParameterValue='<YOUR SUBNET1 ID>' ParameterKey=Subnet2,ParameterValue='<YOUR SUBNET2 ID>' ParameterKey=ClairDBPassword,ParameterValue='<PASSWORD FOR THE CLAIR DATABSE>'
+aws cloudformation create-stack --stack-name "Clair" --template-body file://clair-new-vpc.yaml --capabilities CAPABILITY_NAMED_IAM
 ----
 
 Step 4:: Optional: check if the stack has completed, you do not need to wait for this you can proceed with next steps while this builds.
 
 ----
 until [[ `aws cloudformation describe-stacks --stack-name "Clair" --query "Stacks[0].[StackStatus]" --output text` == "CREATE_COMPLETE" ]]; do  echo "The stack is NOT in a state of CREATE_COMPLETE at `date`";   sleep 30; done && echo "The Stack is built at `date` - Please proceed"
-
 ----
 
 Steps to Deploy Clair using a Cloudformation template via the AWS web console: 
@@ -92,12 +72,12 @@ Steps to Deploy Clair using a CloudFormation template:
 
 Step 1:: Go to the https://console.aws.amazon.com/[AWS console] and select *CloudFormation*. and click *Create Stack*. The following page is displayed. 
 
-Step 2:: Upload clair-existing-vpc.yaml This is the cloudFormation template used to provison Clair and related resources. Click *Next*. 
+Step 2:: Upload clair-new-vpc.yaml This is the cloudFormation template used to provison Clair and related resources. Click *Next*. 
 
 
 image::Clair-01.png[Clair]
 
-Step 3:: Provide a name for your stack (e.g. Clair) as well as a name for your Fargate cluster (e.g. Clair), or accept the defaults. Select an existing VPC and Subnets, please ensuure both subnets exist within the selected VPC. Define a Password for the Clair database Click *Next*. 
+Step 3:: Provide a name for your stack (e.g. Clair) as well as a name for your Fargate cluster (e.g. Clair), or accept the defaults. Define a Password for the Clair database Click *Next*. 
 
 image::Clair-02.png[Clair]
 
@@ -108,7 +88,7 @@ You can view the status by viewing the *Events* tab. Upon successful completion 
 ** *NOTE:* It may take between 10 to 15 minutes for the stack to complete.
 
 Step 5:: Go to the https://console.aws.amazon.com/ecs[Amazon ECS console], select your cluster (e.g. Clair), select the *Tasks* tab. Now select the *Logs* Tab, you will see the events for the Clair health service, database migrations and update of the vulnerabilities databases.
-This step will take some time to complete.
+This step will take some time to complete. Should the scanner be used before this update is complete, many security risks may not be detected.
 
 For more detail regarding Clair see: https://github.com/coreos/clair[https://github.com/coreos/clair]
 
