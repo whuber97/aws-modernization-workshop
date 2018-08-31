@@ -99,7 +99,7 @@ Step 3:: Obtain the clone URL for our repository. We will pass the output of our
 
 [source,shell]
 ----
-CloneURL=$(aws codecommit get-repository --repository-name aws_pet_store_repo --query 'repositoryMetadata.cloneUrlHttp')
+CloneURL=$(aws codecommit get-repository --repository-name aws_pet_store_repo --query 'repositoryMetadata.cloneUrlHttp' --output=text)
 ----
 
 === Cloning your CodeCommit Repo
