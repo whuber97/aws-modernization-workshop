@@ -194,5 +194,5 @@ Outputs:
     Value: !Ref PublicSubnet1  
   Subnet2:
     Description: Subnet2 ID
-    Value: !Ref PublicSubnet1  
 
+    Value: !Ref PublicSubnet2
