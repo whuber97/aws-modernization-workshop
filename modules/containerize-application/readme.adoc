@@ -22,13 +22,14 @@ The Pet Store application is a Java 7 based application that runs on top of the 
 ==== Building the Dockerfile
 
 1. To get started, switch to the `containerize-application` folder within this repository. Then open the `Dockerfile` in your editor of choice.
-[source,bash]
++
+[source,shell]
 ----
 cd ~/environment/aws-modernization-workshop/modules/containerize-application/
 ----
-
++
 2. The first stage of our `Dockerfile` will be to build the application. We will use the `maven:3.5-jdk-7` container from Docker Hub as our base image. The first stage of our `Dockerfile` will need to copy the code into the container, install the dependencies, then build the application using Maven.
-
++
 3. The second stage of our `Dockerfile` will be to build our Wildfly application server. We will need to copy the WAR file we created in the first stage to the second stage. The WAR file is built to `/usr/src/app/target/applicationPetstore.war` in the first stage. We will need to copy that WAR file to the `/opt/jboss/wildfly/standalone/deployments/applicationPetstore.war`. We will also need to copy the `standalone.xml` file to the proper location `/opt/jboss/wildfly/standalone/configuration/standalone.xml`. Wildfly will deploy that application on boot. You will also need to install the PostgreSQL driver which is already downloaded. Include the script below to install.
 +
 [source,shell]
@@ -231,4 +232,7 @@ docker-compose build petstore
 docker-compose up petstore
 ----
 +
-4. Visit http://localhost:8080/applicationPetstore to view the application.
+4. To preview the application you will need to click *Preview* from the top
+   menu of the Cloud9 environment.
+
+5. Then navigate to `/applicationPetstore/` to view the application. _note: The trailing slash is required._

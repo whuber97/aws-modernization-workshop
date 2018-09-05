@@ -146,7 +146,7 @@ docker-compose build petstore
 docker-compose up petstore
 ----
 +
-4. You can check the status of the healthcheck as the Docker container starts by running the following command:
+5. You can check the status of the healthcheck as the Docker container starts by running the following command:
 +
 [source,shell]
 ----
@@ -174,7 +174,7 @@ CONTAINER ID        IMAGE                               COMMAND                 
 82883cfb7d87        postgres:9.6                        "docker-entrypoint.s…"   5 minutes ago       Up 5 minutes (healthy)   0.0.0.0:5432->5432/tcp                           containerize-application_postgres_1
 ....
 +
-5. Now that our containers are healthy for our Pet Store application, let's examine the healthchecks using `docker-inspect`.
+6. Now that our containers are healthy for our Pet Store application, let's examine the healthchecks using `docker-inspect`.
 +
 [source,shell]
 ----
@@ -240,16 +240,16 @@ docker inspect containerize-application_petstore_1 | jq '.[].State.Health'
 }
 ....
 +
-6. Once you've confirmed that our Pet Store application is working with healthchecks, visit http://localhost:8080/applicationPetstore to view the application.
+7. Once you've confirmed that our Pet Store application is working with healthchecks, visit http://localhost:8080/applicationPetstore to view the application.
 +
-7. Now we must tag the containerize-application_petstore image so you can push the image to the ECR repository. Note: You need to replace the value from the repositoryURI from the previous labs.
+8. Now we must tag the containerize-application_petstore image so you can push the image to the ECR repository. Note: You need to replace the value from the repositoryURI from the previous labs.
 +
 [source,shell]
 ----
 docker tag containerize-application_petstore:latest 123456789012.dkr.ecr.us-west-2.amazonaws.com/petstore_frontend:latest
 ----
 +
-8. Run the following command to push this image to the ECR repository. Note: You need to replace the value with
+9. Run the following command to push this image to the ECR repository. Note: You need to replace the value with
 the tag you applied in the previous step.
 +
 [source,shell]
