@@ -85,21 +85,30 @@ Step 1:: From your Cloud9 IDE, launch the CloudFormation template:
 
 [source,shell]
 ----
-aws cloudformation create-stack --stack-name cicd --template-body=file://modules/cicd/pipeline.yaml --capabilities CAPABILITY_IAM
+aws cloudformation create-stack \
+  --stack-name cicd --template-body=file://modules/cicd/pipeline.yaml \
+  --capabilities CAPABILITY_IAM
 ----
 
 Step 2:: Wait for the CloudFormation template to successfully deploy.
 
 [source,shell]
 ----
-until [[ `aws cloudformation describe-stacks --stack-name "cicd" --query "Stacks[0].[StackStatus]" --output text` == "CREATE_COMPLETE" ]]; do  echo "The stack is NOT in a state of CREATE_COMPLETE at `date`";   sleep 30; done && echo "The Stack is built at `date` - Please proceed"
+until [[ `aws cloudformation describe-stacks \
+  --stack-name "cicd" --query "Stacks[0].[StackStatus]" \
+  --output text` == "CREATE_COMPLETE" ]]; \
+  do  echo "The stack is NOT in a state of CREATE_COMPLETE at `date`"; \
+  sleep 30; done && echo "The Stack is built at `date` - Please proceed"
 ----
 
 Step 3:: Obtain the clone URL for our repository. We will pass the output of our CLI query to an ENVIRONMENT VARIABLE for later use.
 
 [source,shell]
 ----
-CloneURL=$(aws codecommit get-repository --repository-name aws_pet_store_repo --query 'repositoryMetadata.cloneUrlHttp' --output=text)
+CloneURL=$(aws codecommit get-repository \
+  --repository-name aws_pet_store_repo \
+  --query 'repositoryMetadata.cloneUrlHttp' \
+  --output=text)
 ----
 
 === Cloning your CodeCommit Repo
