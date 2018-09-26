@@ -27,5 +27,4 @@ phases:
       - printf '[{"name":"petstore","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > ${CODEBUILD_SRC_DIR}/imagedefinitions.json
 artifacts:
   files:
-  - '*/imagedefinitions.json'
-  base-directory: ${CODEBUILD_SRC_DIR}
+  - 'imagedefinitions.json'
