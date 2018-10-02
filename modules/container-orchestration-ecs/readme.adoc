@@ -224,7 +224,7 @@ This grace period can prevent the ECS service scheduler from marking tasks as un
 +
 17. Type in 80 for the *Listener port* and ensure it is set to *create new*.
 +
-18. Ensure that *Target group name* is set to *create new* and the name should be *ecs-petsto-petstore.
+18. Ensure that *Target group name* is set to *create new* and the name should be *ecs-petsto-petstore*.
 +
 19. *Uncheck* the box for *Enable service discovery integration* and click *Next step*.
 +
